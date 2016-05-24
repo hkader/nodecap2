@@ -160,9 +160,7 @@ _.assign(ICAPResponse.prototype, {
       // ensure that data is in buffer form for accurate length measurements
       // and to avoid encoding issues when writing
       tmp = data instanceof Buffer ? data : new Buffer(data);
-      this.stream.write(tmp.length.toString(16) + crlf);
-      this.stream.write(tmp);
-      this.stream.write(crlf);
+      this.stream.write(tmp.length.toString(16) + crlf + tmp + crlf);
     } else {
       // alert the filter that stream is over
       // can return data to write it before the stream is ended
