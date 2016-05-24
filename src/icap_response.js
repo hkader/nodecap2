@@ -70,6 +70,9 @@ _.assign(ICAPResponse.prototype, {
   _joinHeaders: function (status, headers) {
     var block = status.join(' ') + crlf;
     for (var key in headers) {
+      if (key.indexOf('Set-Cookie-') === 0) {
+        key = 'Set-Cookie';
+      }
       var value = headers[key];
       if (Array.isArray(value)) {
         for (var i = 0, l=value.length; i< l; ++i) {
@@ -183,6 +186,9 @@ _.assign(ICAPResponse.prototype, {
       this._write(this.sendData);
       this._write(null);
       this.sendData = null;
+    }
+    if (this.icapStatus && this.icapStatus[1] === 206) {
+      this.stream.write("0; use-original-body=0\r\n\r\n");
     }
     this.done = true;
   }
